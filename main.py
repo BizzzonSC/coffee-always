@@ -1,16 +1,35 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import sys
+import random
+from PyQt5.QtGui import QPainter, QColor
+from PyQt5 import uic
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
+import sqlite3
 
 
-# Press the green button in the gutter to run the script.
+class MyWidget(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("main.ui", self)
+        con = sqlite3.connect('coffe.sqlite')
+        cur = con.cursor()
+        result = cur.execute("""SELECT * FROM Coffe""")
+        r1 = ''
+        for elem in result:
+            r = ''
+            for i in elem:
+                t = str(i)
+                r += t
+                r += ', '
+            r = r[:-2]
+            r1 += r + '\n'
+        r1 = r1[:-2]
+        self.textEdit.append(r1)
+        con.close()
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    app = QApplication(sys.argv)
+    ex = MyWidget()
+    ex.show()
+    sys.exit(app.exec())
